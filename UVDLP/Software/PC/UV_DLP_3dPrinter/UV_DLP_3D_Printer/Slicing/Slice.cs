@@ -4,6 +4,7 @@ using System.Collections;
 using Engine3D;
 using System.Drawing;
 using System.IO;
+using System.Collections.Generic;
 
 namespace UV_DLP_3D_Printer;
 
@@ -77,11 +78,11 @@ public class MinMax_XY
 }
 public class Slice
 {
-    public ArrayList m_segments; // list of polyline segments
+    public List<PolyLine3D> m_segments = []; // list of polyline segments
     
     public Slice()
     {
-        m_segments = new ArrayList();
+       
     }
     public bool Load(StreamReader sr) 
     {

@@ -3,6 +3,7 @@ using Engine3D;
 using System.Collections;
 using System.Threading;
 using UV_DLP_3D_Printer.Slicing;
+using System.Collections.Generic;
 namespace UV_DLP_3D_Printer;
 
 public class Slicer
@@ -90,9 +91,9 @@ public class Slicer
                     return;
                 }
                 //get a list of polygons at this slice z height that intersect
-                ArrayList lstply = GetZPolys(m_obj, curz);
+                var lstply = GetZPolys(m_obj, curz);
                 //iterate through all the polygons and generat 2d line segments at this z level
-                ArrayList lstintersections = GetZIntersections(lstply, curz);
+                var lstintersections = GetZIntersections(lstply, curz);
                 curz += m_sf.m_config.ZThick;
                 Slice sl = new Slice();
                 sl.m_segments = lstintersections;
@@ -116,11 +117,11 @@ public class Slicer
      * to the intersection of a plane through the polygons. Each polygon may return 0 or 1 line intersections 
      * on the 2d XY plane
      */
-    public ArrayList GetZIntersections(ArrayList polys,double zcur) 
+    public List<PolyLine3D> GetZIntersections(List<Polygon> polys,double zcur) 
     {
         try
         {
-            ArrayList lstlines = new ArrayList();
+            List<PolyLine3D> lstlines = [];
             foreach (Polygon poly in polys) 
             {
                 PolyLine3D s3d = poly.IntersectZPlane(zcur);
@@ -140,9 +141,9 @@ public class Slicer
     /*
      Return a list of polygons that intersect at this zlevel
      */
-    public ArrayList GetZPolys(Object3D obj, double zlev) 
+    public List<Polygon> GetZPolys(Object3D obj, double zlev) 
     {
-        ArrayList lst = new ArrayList();
+        List<Polygon> lst = [];
         foreach(Polygon p in obj.m_lstpolys)
         {
             //check and see if current z level is between any of the polygons z coords
